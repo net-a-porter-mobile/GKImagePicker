@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class GKImageCropViewController;
 
 @protocol GKImagePickerDelegate;
 
@@ -16,6 +17,8 @@
 @property (nonatomic, assign) CGSize cropSize; //default value is 320x320 (which is exactly the same as the normal imagepicker uses)
 @property (nonatomic, strong, readonly) UIImagePickerController *imagePickerController;
 @property (nonatomic, assign) BOOL resizeableCropArea;
+
+- (void)displayCropViewForImage:(UIImage *)image;
 
 @end
 
@@ -37,5 +40,7 @@
  * @param imagePicker, the image picker instance
  */
 - (void)imagePickerDidCancel:(GKImagePicker *)imagePicker;
+
+- (void)imagePickerWantsToDisplayCropController:(GKImageCropViewController *)controller;
 
 @end
