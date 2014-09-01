@@ -69,15 +69,18 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    [self displayCropViewForImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
+}
 
+- (void)displayCropViewForImage:(UIImage *)image {
     GKImageCropViewController *cropController = [[GKImageCropViewController alloc] init];
-    cropController.contentSizeForViewInPopover = picker.contentSizeForViewInPopover;
-    cropController.sourceImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    //cropController.contentSizeForViewInPopover = picker.contentSizeForViewInPopover;
+    cropController.sourceImage = image;
     cropController.resizeableCropArea = self.resizeableCropArea;
     cropController.cropSize = self.cropSize;
     cropController.delegate = self;
-    [picker pushViewController:cropController animated:YES];
-    
+    //[picker pushViewController:cropController animated:YES];
+    [self.delegate imagePickerWantsToDisplayCropController:cropController];
 }
 
 #pragma mark -
