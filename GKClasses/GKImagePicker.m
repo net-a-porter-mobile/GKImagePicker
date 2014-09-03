@@ -87,7 +87,6 @@
 #pragma GKImagePickerDelegate
 
 - (void)imageCropController:(GKImageCropViewController *)imageCropController didFinishWithCroppedImage:(UIImage *)croppedImage{
-    
     if ([self.delegate respondsToSelector:@selector(imagePicker:pickedImage:)]) {
         [self.delegate imagePicker:self pickedImage:croppedImage];   
     }

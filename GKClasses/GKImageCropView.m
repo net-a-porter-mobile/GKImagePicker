@@ -50,7 +50,6 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
 @end
 
 @interface GKImageCropView ()<UIScrollViewDelegate>
-@property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) GKImageCropOverlayView *cropOverlayView;
 @property (nonatomic, assign) CGFloat xOffset;
@@ -182,7 +181,7 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
         self.scrollView.showsVerticalScrollIndicator = NO;
         self.scrollView.delegate = self;
         self.scrollView.clipsToBounds = NO;
-        self.scrollView.decelerationRate = 0.0; 
+        self.scrollView.decelerationRate = 0.0;
         self.scrollView.backgroundColor = [UIColor clearColor];
         [self addSubview:self.scrollView];
         
@@ -191,7 +190,6 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
         self.imageView.backgroundColor = [UIColor blackColor];
         [self.scrollView addSubview:self.imageView];
     
-        
         self.scrollView.minimumZoomScale = CGRectGetWidth(self.scrollView.frame) / CGRectGetWidth(self.imageView.frame);
         self.scrollView.maximumZoomScale = 20.0;
         [self.scrollView setZoomScale:1.0];
@@ -231,7 +229,7 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
     CGSize size = self.cropSize;
     CGFloat toolbarSize = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 0 : 54;
     self.xOffset = floor((CGRectGetWidth(self.bounds) - size.width) * 0.5);
-    self.yOffset = floor((CGRectGetHeight(self.bounds) - toolbarSize - size.height) * 0.5); //fixed
+    self.yOffset = floor((CGRectGetHeight(self.bounds) - toolbarSize - size.height) * 0.3); //fixed
 
     CGFloat height = self.imageToCrop.size.height;
     CGFloat width = self.imageToCrop.size.width;
@@ -252,7 +250,7 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
         faktoredWidth = width / faktor;
         faktoredHeight =  size.height;
     }
-    
+
     self.cropOverlayView.frame = self.bounds;
     self.scrollView.frame = CGRectMake(xOffset, yOffset, size.width, size.height);
     self.scrollView.contentSize = CGSizeMake(size.width, size.height);

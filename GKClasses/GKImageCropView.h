@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UIImage *imageToCrop;
 @property (nonatomic, assign) CGSize cropSize;
 @property (nonatomic, assign) BOOL resizableCropArea;
+@property (nonatomic, strong) UIScrollView *scrollView;
 
 - (UIImage *)croppedImage;
 

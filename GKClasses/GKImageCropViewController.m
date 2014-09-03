@@ -9,6 +9,8 @@
 #import "GKImageCropViewController.h"
 #import "GKImageCropView.h"
 
+static const int kTabBarHeight = 130.0f;
+
 @interface GKImageCropViewController ()
 
 @property (nonatomic, strong) GKImageCropView *imageCropView;
@@ -38,12 +40,14 @@
 
 
 - (void)_actionCancel{
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
 - (void)_actionUse{
     _croppedImage = [self.imageCropView croppedImage];
+    //clipping the scroll view to bounds so the dismiss of the modal view goes smoothly
+    self.imageCropView.scrollView.clipsToBounds = YES;
     [self.delegate imageCropController:self didFinishWithCroppedImage:_croppedImage];
 }
 
@@ -54,7 +58,7 @@
                                                                                           target:self 
                                                                                           action:@selector(_actionCancel)];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"GKIuse", @"")
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"ugc-crop-view-use-button", @"")
                                                                               style:UIBarButtonItemStyleBordered 
                                                                              target:self 
                                                                              action:@selector(_actionUse)];
@@ -63,7 +67,10 @@
 
 - (void)_setupCropView{
     
-    self.imageCropView = [[GKImageCropView alloc] initWithFrame:self.view.bounds];
+    CGRect frame = self.view.bounds;
+    frame.size.height -= kTabBarHeight;
+    
+    self.imageCropView = [[GKImageCropView alloc] initWithFrame:frame];
     [self.imageCropView setImageToCrop:sourceImage];
     [self.imageCropView setResizableCropArea:self.resizeableCropArea];
     [self.imageCropView setCropSize:cropSize];
@@ -75,25 +82,35 @@
     if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		
-        [[self.cancelButton titleLabel] setFont:[UIFont boldSystemFontOfSize:16]];
+        [[self.cancelButton titleLabel] setFont:[UIFont fontWithName:@"Avenir-Heavy" size:12]];
         [[self.cancelButton titleLabel] setShadowOffset:CGSizeMake(0, -1)];
         [self.cancelButton setFrame:CGRectMake(0, 0, 58, 30)];
-        [self.cancelButton setTitle:NSLocalizedString(@"GKIcancel",@"") forState:UIControlStateNormal];
+        [self.cancelButton setTitle:NSLocalizedString(@"ugc-crop-view-cancel-button",@"") forState:UIControlStateNormal];
         [self.cancelButton setTitleShadowColor:[UIColor colorWithRed:0.118 green:0.247 blue:0.455 alpha:1] forState:UIControlStateNormal];
         [self.cancelButton  addTarget:self action:@selector(_actionCancel) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.cancelButton.layer.cornerRadius = 4;
+        self.cancelButton.layer.masksToBounds = YES;
+        self.cancelButton.layer.borderColor = [[UIColor colorWithWhite:0.75 alpha:1] CGColor];
+        self.cancelButton.layer.borderWidth = 1.0f;
     } else {
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		
         [self.cancelButton setBackgroundImage:[[UIImage imageNamed:@"PLCameraSheetButton.png"] stretchableImageWithLeftCapWidth:5 topCapHeight:0] forState:UIControlStateNormal];
         [self.cancelButton setBackgroundImage:[[UIImage imageNamed:@"PLCameraSheetButtonPressed.png"] stretchableImageWithLeftCapWidth:5 topCapHeight:0] forState:UIControlStateHighlighted];
 		
-        [[self.cancelButton titleLabel] setFont:[UIFont boldSystemFontOfSize:11]];
+        [[self.cancelButton titleLabel] setFont:[UIFont fontWithName:@"Avenir-Heavy" size:12]];
         [[self.cancelButton titleLabel] setShadowOffset:CGSizeMake(0, 1)];
         [self.cancelButton setFrame:CGRectMake(0, 0, 50, 30)];
-        [self.cancelButton setTitle:NSLocalizedString(@"GKIcancel",@"") forState:UIControlStateNormal];
+        [self.cancelButton setTitle:NSLocalizedString(@"ugc-crop-view-cancel-button",@"") forState:UIControlStateNormal];
         [self.cancelButton setTitleColor:[UIColor colorWithRed:0.173 green:0.176 blue:0.176 alpha:1] forState:UIControlStateNormal];
         [self.cancelButton setTitleShadowColor:[UIColor colorWithRed:0.827 green:0.831 blue:0.839 alpha:1] forState:UIControlStateNormal];
         [self.cancelButton  addTarget:self action:@selector(_actionCancel) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.cancelButton.layer.cornerRadius = 4;
+        self.cancelButton.layer.masksToBounds = YES;
+        self.cancelButton.layer.borderColor = [[UIColor colorWithWhite:0.75 alpha:1] CGColor];
+        self.cancelButton.layer.borderWidth = 1.0f;
     }
 }
 
@@ -102,24 +119,34 @@
     if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
         self.useButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		
-        [[self.useButton titleLabel] setFont:[UIFont boldSystemFontOfSize:16]];
+        [[self.useButton titleLabel] setFont:[UIFont fontWithName:@"Avenir-Heavy" size:12]];
         [[self.useButton titleLabel] setShadowOffset:CGSizeMake(0, -1)];
         [self.useButton setFrame:CGRectMake(0, 0, 58, 30)];
-        [self.useButton setTitle:NSLocalizedString(@"GKIuse",@"") forState:UIControlStateNormal];
+        [self.useButton setTitle:NSLocalizedString(@"ugc-crop-view-use-button",@"") forState:UIControlStateNormal];
         [self.useButton setTitleShadowColor:[UIColor colorWithRed:0.118 green:0.247 blue:0.455 alpha:1] forState:UIControlStateNormal];
         [self.useButton  addTarget:self action:@selector(_actionUse) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.useButton.layer.cornerRadius = 4;
+        self.useButton.layer.masksToBounds = YES;
+        self.useButton.layer.borderColor = [[UIColor colorWithWhite:0.75 alpha:1] CGColor];
+        self.useButton.layer.borderWidth = 1.0f;
     } else {
         self.useButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		
         [self.useButton setBackgroundImage:[[UIImage imageNamed:@"PLCameraSheetDoneButton.png"] stretchableImageWithLeftCapWidth:5 topCapHeight:0] forState:UIControlStateNormal];
         [self.useButton setBackgroundImage:[[UIImage imageNamed:@"PLCameraSheetDoneButtonPressed.png"] stretchableImageWithLeftCapWidth:5 topCapHeight:0] forState:UIControlStateHighlighted];
 		
-        [[self.useButton titleLabel] setFont:[UIFont boldSystemFontOfSize:11]];
+        [[self.useButton titleLabel] setFont:[UIFont fontWithName:@"Avenir-Heavy" size:12]];
         [[self.useButton titleLabel] setShadowOffset:CGSizeMake(0, -1)];
         [self.useButton setFrame:CGRectMake(0, 0, 50, 30)];
-        [self.useButton setTitle:NSLocalizedString(@"GKIuse",@"") forState:UIControlStateNormal];
+        [self.useButton setTitle:NSLocalizedString(@"ugc-crop-view-use-button",@"") forState:UIControlStateNormal];
         [self.useButton setTitleShadowColor:[UIColor colorWithRed:0.118 green:0.247 blue:0.455 alpha:1] forState:UIControlStateNormal];
         [self.useButton  addTarget:self action:@selector(_actionUse) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.useButton.layer.cornerRadius = 4;
+        self.useButton.layer.masksToBounds = YES;
+        self.useButton.layer.borderColor = [[UIColor colorWithWhite:0.75 alpha:1] CGColor];
+        self.useButton.layer.borderWidth = 1.0f;
     }
 }
 
@@ -147,9 +174,8 @@
 }
 
 - (void)_setupToolbar{
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    //if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         self.toolbar = [[UIToolbar alloc] initWithFrame:CGRectZero];
-        
 		
         if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
             self.toolbar.translucent = YES;
@@ -167,7 +193,7 @@
         if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
             info.text = @"";
         } else {
-            info.text = NSLocalizedString(@"GKImoveAndScale", @"");
+            info.text = @"";//NSLocalizedString(@"GKImoveAndScale", @"");
         }
         
         info.textColor = [UIColor colorWithRed:0.173 green:0.173 blue:0.173 alpha:1];
@@ -184,7 +210,7 @@
         
         [self.toolbar setItems:[NSArray arrayWithObjects:cancel, flex, lbl, flex, use, nil]];
 
-    }
+    //}
 }
 
 #pragma mark -
@@ -208,11 +234,7 @@
     [self _setupCropView];
     [self _setupToolbar];
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        [self.navigationController setNavigationBarHidden:YES];
-    } else {
-        [self.navigationController setNavigationBarHidden:NO];
-    }
+    [self.navigationController setNavigationBarHidden:NO];
 }
 
 - (void)viewDidUnload{
@@ -224,7 +246,7 @@
     [super viewWillLayoutSubviews];
     
     self.imageCropView.frame = self.view.bounds;
-    self.toolbar.frame = CGRectMake(0, CGRectGetHeight(self.view.frame) - 54, 320, 54);
+    self.toolbar.frame = CGRectMake(0, CGRectGetHeight(self.view.frame) - kTabBarHeight, CGRectGetWidth(self.view.frame), kTabBarHeight);
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
