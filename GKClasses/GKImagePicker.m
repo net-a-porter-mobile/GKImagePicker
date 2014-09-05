@@ -68,8 +68,11 @@
     
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
-    [self displayCropViewForImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    if (self.imagePickerController.sourceType == UIImagePickerControllerSourceTypeCamera)
+        [self.delegate imagePicker:self pickedImage:[info objectForKey:UIImagePickerControllerEditedImage]];
+    else
+        [self displayCropViewForImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
 }
 
 - (void)displayCropViewForImage:(UIImage *)image {

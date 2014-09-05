@@ -27,7 +27,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-
         self.backgroundColor = [UIColor clearColor];
         self.userInteractionEnabled = YES;
     }
