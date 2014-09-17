@@ -242,7 +242,8 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
     }
 
     self.cropOverlayView.frame = self.bounds;
-    self.scrollView.frame = CGRectMake(xOffset, yOffset + 40, size.width, size.height);
+    self.scrollView.frame = CGRectMake(xOffset, yOffset + 46, size.width, size.height);
+    self.scrollView.backgroundColor = [UIColor redColor];
     self.scrollView.contentSize = CGSizeMake(size.width, size.height);
     self.imageView.frame = CGRectMake(0, floor((size.height - faktoredHeight) * 0.5), faktoredWidth, faktoredHeight);
 }
