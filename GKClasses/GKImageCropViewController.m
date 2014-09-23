@@ -9,6 +9,8 @@
 #import "GKImageCropViewController.h"
 #import "GKImageCropView.h"
 
+static const int kTabBarHeight = 130.0f;
+
 @interface GKImageCropViewController ()
 
 @property (nonatomic, strong) GKImageCropView *imageCropView;
@@ -38,7 +40,7 @@
 
 
 - (void)_actionCancel{
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -52,39 +54,21 @@
 
 - (void)_setupNavigationBar{
     
-    UIImage *buttonImage = [UIImage imageNamed:@"back-button"];
-    CGRect buttonFrame = CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height);
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
+                                                                                          target:self 
+                                                                                          action:@selector(_actionCancel)];
     
-    UIButton *leftButton = [[UIButton alloc] initWithFrame:buttonFrame];
-    [leftButton setImage:buttonImage forState:UIControlStateNormal];
-    [leftButton addTarget:self action:@selector(_actionCancel) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIView *buttonView = [[UIView alloc] initWithFrame:buttonFrame];
-    [buttonView addSubview:leftButton];
-    
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:buttonView];
-    
-    UIButton *rightButton =  [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    UILabel *shoppingBagButtonLabel = [[UILabel alloc]initWithFrame:buttonFrame];
-    [shoppingBagButtonLabel setFont:[UIFont fontWithName:@"Avenir-Roman" size:18]];
-    [shoppingBagButtonLabel setText:NSLocalizedString(@"ugc-crop-view-save-button", @"")];
-    [shoppingBagButtonLabel setTextColor:[UIColor blackColor]];
-    
-    CGSize shoppingBagButtonLabelSize = [shoppingBagButtonLabel.text sizeWithFont:[UIFont systemFontOfSize:18]];
-    [shoppingBagButtonLabel setFrame:CGRectMake(0, 0, shoppingBagButtonLabelSize.width, shoppingBagButtonLabelSize.height)];
-    [rightButton setFrame:CGRectMake(0, 0, shoppingBagButtonLabelSize.width, shoppingBagButtonLabelSize.height)];
-    [rightButton addTarget:self action:@selector(_actionUse) forControlEvents:UIControlEventTouchUpInside];
-    
-    [rightButton addSubview:shoppingBagButtonLabel];
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"ugc-crop-view-use-button", @"")
+                                                                              style:UIBarButtonItemStyleBordered 
+                                                                             target:self 
+                                                                             action:@selector(_actionUse)];
 }
 
 
 - (void)_setupCropView{
     
     CGRect frame = self.view.bounds;
+    frame.size.height -= kTabBarHeight;
     
     self.imageCropView = [[GKImageCropView alloc] initWithFrame:frame];
     [self.imageCropView setImageToCrop:sourceImage];
@@ -202,8 +186,8 @@
 
         [self.view addSubview:self.toolbar];
         
-        //[self _setupCancelButton];
-        //[self _setupUseButton];
+        [self _setupCancelButton];
+        [self _setupUseButton];
         
         UILabel *info = [[UILabel alloc] initWithFrame:CGRectZero];
         if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
@@ -244,7 +228,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.title = NSLocalizedString(@"ugc-crop-view-title", @"");
+    self.title = NSLocalizedString(@"GKIchoosePhoto", @"");
 
     [self _setupNavigationBar];
     [self _setupCropView];
@@ -262,6 +246,7 @@
     [super viewWillLayoutSubviews];
     
     self.imageCropView.frame = self.view.bounds;
+    self.toolbar.frame = CGRectMake(0, CGRectGetHeight(self.view.frame) - kTabBarHeight, CGRectGetWidth(self.view.frame), kTabBarHeight);
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
