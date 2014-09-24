@@ -202,9 +202,9 @@
 
         [self.view addSubview:self.toolbar];
         
-//        [self _setupCancelButton];
-//        [self _setupUseButton];
-    
+        //[self _setupCancelButton];
+        //[self _setupUseButton];
+        
         UILabel *info = [[UILabel alloc] initWithFrame:CGRectZero];
         if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
             info.text = @"";
@@ -251,6 +251,8 @@
     [self _setupToolbar];
 
     [self.navigationController setNavigationBarHidden:NO];
+    
+    self.view.clipsToBounds = YES;
 }
 
 - (void)viewDidUnload{

@@ -176,7 +176,7 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
         [self addSubview:self.scrollView];
         
         self.imageView = [[UIImageView alloc] initWithFrame:self.scrollView.frame];
-        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        self.imageView.contentMode = UIViewContentModeScaleAspectFill;
         self.imageView.backgroundColor = [UIColor blackColor];
         [self.scrollView addSubview:self.imageView];
     
@@ -219,7 +219,7 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
     CGSize size = self.cropSize;
     CGFloat toolbarSize = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 0 : 54;
     self.xOffset = floor((CGRectGetWidth(self.bounds) - size.width) * 0.5);
-    self.yOffset = floor((CGRectGetHeight(self.bounds) - toolbarSize - size.height) * 0.3); //fixed
+    self.yOffset = floor((CGRectGetHeight(self.bounds) - toolbarSize - size.height) * 0.5); //fixed
 
     CGFloat height = self.imageToCrop.size.height;
     CGFloat width = self.imageToCrop.size.width;
@@ -228,23 +228,43 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
     CGFloat faktoredHeight = 0.f;
     CGFloat faktoredWidth = 0.f;
     
+    //Flip sign, instead of Aspect Fit, will be Aspect Fill.
+    //Crop zone is a rectangle
     if(width > height){
-        
-        faktor = width / size.width;
-        faktoredWidth = size.width;
-        faktoredHeight =  height / faktor;
-        
-    } else {
-        
-        faktor = height / size.height;
-        faktoredWidth = width / faktor;
-        faktoredHeight =  size.height;
+        if(size.width > size.height){
+            faktor = width / size.width;
+            faktoredWidth = size.width;
+            faktoredHeight =  height / faktor;
+        } else {
+            faktor = height / size.height;
+            faktoredWidth = width / faktor;
+            faktoredHeight =  size.height;
+        }
+    }
+    //Crop zone is a square
+    else {
+        if(width < height){
+            faktor = width / size.width;
+            faktoredWidth = size.width;
+            faktoredHeight =  height / faktor;
+        } else {
+            faktor = height / size.height;
+            faktoredWidth = width / faktor;
+            faktoredHeight =  size.height;
+        }
     }
 
     self.cropOverlayView.frame = self.bounds;
-    self.scrollView.frame = CGRectMake(xOffset, yOffset + 46, size.width, size.height);
-    self.scrollView.contentSize = CGSizeMake(size.width, size.height);
-    self.imageView.frame = CGRectMake(0, floor((size.height - faktoredHeight) * 0.5), faktoredWidth, faktoredHeight);
+    
+    self.scrollView.frame = CGRectMake(xOffset, yOffset - 42, size.width, size.height);
+//    self.scrollView.contentSize = CGSizeMake(size.width, size.height);
+//    self.imageView.frame = CGRectMake(0, floor((size.height - faktoredHeight) * 0.5), faktoredWidth, faktoredHeight);
+    //Content Size was not being set correctly.
+    self.scrollView.contentSize = CGSizeMake(faktoredWidth, faktoredHeight);
+    //Center the scrollview in the crop zone.
+    [self.scrollView setContentOffset:CGPointMake((faktoredWidth-size.width)/2, (faktoredHeight-size.height)/2) animated:NO];
+    self.scrollView.contentInset = UIEdgeInsetsZero;
+    self.imageView.frame = CGRectMake(0, floor((size.height - faktoredHeight/2) * 0.5), faktoredWidth, faktoredHeight);
 }
 
 #pragma mark -
