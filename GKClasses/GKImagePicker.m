@@ -9,6 +9,20 @@
 #import "GKImagePicker.h"
 #import "GKImageCropViewController.h"
 
+@interface UIImagePickerController(Nonrotating)
+
+- (BOOL)shouldAutorotate;
+
+@end
+
+@implementation UIImagePickerController(Nonrotating)
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+@end
+
 @interface GKImagePicker ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, GKImageCropControllerDelegate>
 @property (nonatomic, strong, readwrite) UIImagePickerController *imagePickerController;
 - (void)_hideController;
