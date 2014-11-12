@@ -242,7 +242,7 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
         }
     }
     //Crop zone is a square
-    else {
+    else if (height < width) {
         if(width < height){
             faktor = width / size.width;
             faktoredWidth = size.width;
@@ -252,6 +252,9 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
             faktoredWidth = width / faktor;
             faktoredHeight =  size.height;
         }
+    } else {
+        faktoredWidth = size.width;
+        faktoredHeight = size.height;
     }
 
     self.cropOverlayView.frame = self.bounds;
