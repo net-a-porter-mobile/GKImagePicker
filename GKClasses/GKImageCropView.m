@@ -240,18 +240,10 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
             faktoredWidth = width / faktor;
             faktoredHeight =  size.height;
         }
-    }
-    //Crop zone is a square
-    else if (height < width) {
-        if(width < height){
-            faktor = width / size.width;
-            faktoredWidth = size.width;
-            faktoredHeight =  height / faktor;
-        } else {
-            faktor = height / size.height;
-            faktoredWidth = width / faktor;
-            faktoredHeight =  size.height;
-        }
+    } else if(width < height){
+        faktor = width / size.width;
+        faktoredWidth = size.width;
+        faktoredHeight =  height / faktor;
     } else {
         faktoredWidth = size.width;
         faktoredHeight = size.height;
