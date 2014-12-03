@@ -53,7 +53,7 @@
 - (void)_setupNavigationBar{
     
     UIImage *buttonImage = [UIImage imageNamed:@"back-button"];
-    CGRect buttonFrame = CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height);
+    CGRect buttonFrame = CGRectMake(0, 0, MAX(30.0f, buttonImage.size.width), MAX(30.0f, buttonImage.size.height));
     
     UIButton *leftButton = [[UIButton alloc] initWithFrame:buttonFrame];
     [leftButton setImage:buttonImage forState:UIControlStateNormal];
