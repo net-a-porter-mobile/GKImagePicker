@@ -244,7 +244,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.title = NSLocalizedString(@"ugc-crop-view-title", @"");
+    self.title = [NSLocalizedString(@"ugc-crop-view-title", @"") uppercaseString];
 
     [self _setupNavigationBar];
     [self _setupCropView];
