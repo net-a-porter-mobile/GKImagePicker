@@ -224,6 +224,11 @@ static CGRect GKScaleRect(CGRect rect, CGFloat scale)
     CGFloat height = self.imageToCrop.size.height;
     CGFloat width = self.imageToCrop.size.width;
     
+    // if the image is square, we're not able to scroll the image in the overlay.
+    // making the size rectangular
+    if (height == width)
+        height += 1;
+    
     CGFloat faktor = 0.f;
     CGFloat faktoredHeight = 0.f;
     CGFloat faktoredWidth = 0.f;
